@@ -14,9 +14,26 @@
 // 	console.log(politicanCollection);
 // });
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const client = new Discord.Client({disableEveryone: true});
+const fs = require("fs");
+client.commands = new Discord.Collection();
+
+fs.readdir("./cmds/", (err, files) => {
+	if (err) console.error(err);
+
+	let jsfiles = files.filter(f => f.split(".").pop() === "js");
+	if(jsfiles.length <= 0) {
+		console.log("No commands load!");
+		return;
+	}
+
+
+	console.log('Loading' + " " + jsfiles.length + " " + "commands" );
+
+});
+
 client.on("ready", () => {
-  console.log("I am ready!");
+  console.log(client.user.username + " " + "Is ready!!!");
 });
 client.on("message", (message) => {
   if (message.content.startsWith("ping")) {

@@ -28,8 +28,10 @@ client.on("message", (message) => {
   }
 
   // Returns @iOSTom
-  if (message.content == 'what is my avatar') {
-  	message.reply(this.avatorURL);
+  if (message.content == 'userInfo') {
+  	message.channel.send(message.author.username);
+	message.channel.send(message.author.id);
+
   }
 });
 
