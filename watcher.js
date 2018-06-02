@@ -30,6 +30,11 @@ fs.readdir("./cmds/", (err, files) => {
 
 	console.log('Loading' + " " + jsfiles.length + " " + "commands" );
 
+	jsfiles.forEach((f, i) => {
+		let props = require(`./cmds/${f}`);
+		console.log(`${i+1}: ${f} loaded!`);
+		client.commands.set(f, props);
+	});
 });
 
 client.on("ready", () => {
