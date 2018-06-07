@@ -14,9 +14,11 @@
 // 	console.log(politicanCollection);
 // });
 const Discord = require("discord.js");
-const client = new Discord.Client({disableEveryone: true});
+const botsettings = require("./botsettings.json")
+const prefix = botsettings.prefix;
+const bot = new Discord.Client({disableEveryone: true});
 const fs = require("fs");
-client.commands = new Discord.Collection();
+bot.commands = new Discord.Collection();
 
 fs.readdir("./cmds/", (err, files) => {
 	if (err) console.error(err);
@@ -32,17 +34,49 @@ fs.readdir("./cmds/", (err, files) => {
 
 	jsfiles.forEach((f, i) => {
 		let props = require(`./cmds/${f}`);
-		console.log(`${i+1}: ${f} loaded!`);
-		client.commands.set(f, props);
+		console.log(`${f} loaded!`);
+		bot.commands.set(props.help.name, props);
 	});
 });
 
-client.on("ready", () => {
-  console.log(client.user.username + " " + "Is ready!!!");
-});
-client.on("message", (message) => {
-  if (message.content.startsWith("ping")) {
-    message.channel.send("pong!");
+bot.on("ready", async () => {
+  console.log(bot.user.username + " " + "Is ready!!!");
+
+  try {
+
+  	let link = await bot.generateInvite(["ADMINISTRATOR"]);
+  	console.log(link);
+
+  } catch(e) {
+  	console.log(e.stack);
   }
+
 });
-client.login("NDUxNTc0ODQzMzg1NzA4NTU0.DfD-cw.S0pt-Dhbs4p1SiLmpi3MRjH9O3U");
+bot.on("message", (message) => {
+	if(message.author.bot) return;
+
+	let messageArray = message.content.split(" ");
+	let cmd = messageArray[0];
+	let args = messageArray.slice(1);
+
+	let commandfile = bot.commands.get(cmd.slice(prefix.length));
+	if(commandfile) commandfile.run(bot,message,args);
+});
+bot.login(botsettings.token);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

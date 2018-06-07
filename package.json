@@ -10,10 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "curl-request": "^1.1.1",
     "discord.io": "^2.5.3",
     "discord.js": "^11.3.2",
     "express": "^4.16.3",
     "mongodb": "^2.2.33",
+    "propublica-congress-node": "^0.1.2",
+    "unirest": "^0.5.1",
     "winston": "^2.4.2"
   }
 }
