@@ -1,35 +1,82 @@
 const Discord = require("discord.js");
-const unirest = require("unirest");
+const Feed = require('rss-to-json');
+const FeedSub = require('feedsub');
+const mongoose = require('mongoose');
+const db = require('../db');
+const mongoClient = require('mongodb').MongoClient;
 
 
 
 module.exports.run = async (bot, message, args) => {
-// 	let embed = new Discord.RichEmbed()
-// 		.setAuthor(message.author.username)
-// 		.setDescription("This is the user's info!")
-// 		.setColor("#9B59B6")
-// 		.addField("Full Username", `${message.author.username}#${message.author.discriminator}`)
-// 		.addField("ID", message.author.id)
-// 		.addField("Created At", message.author.createdAt);
 
-// 	message.channel.send(embed);
+	Feed.load('http://developer.apple.com/swift/blog/news.rss', function(err, rss){
+    	var feed = [];
+    	var items = rss['items'];
+    	for (var i = items.length - 1; i >= 0; i--) {
+    		var feedObj = {
+    			title: items[i]["title"],
+    			link: items[i]["link"]
+    		};
+    		feed.push(feedObj)
+    	}
+    	
+    	// for(var i in feed) {
+    	// 	let embed = new Discord.RichEmbed()
+    	// 		.setDescription("Swift RSS")
+    	// 		.setColor("#9B59B6")
+    	// 		.addField("Title", `${feed[i]["title"]}`)
+    	// 		.addField("Link", `${feed[i]["link"]}`)
+    	// 		message.channel.send(embed);
+    		
+    	// }
 
-// 	return;
-		
-// }
+  //   	var feedSchema = new mongoose.Schema({
+  //   		title: String,
+  //   		link: String
+		// });
 
-// module.exports.help = {
-// 	name: "userInfo"
-// }
+		// var Feed = mongoose.model("Feed", feedSchema);
 
-	var request = unirest.get("https://api.feedbin.com/v2/authentication.json").end(function (res) {
-		console.log(request.body)
-	});
-	// request.auth('thomas.j.marler@gmail.com', '!!TTommy3531', true).end(function (response) {
-	// 	console.log(response.body)
-	// });
+		// var dummyFeed = {
+		// 	title: "New RSS",
+		// 	link: "http://newRss.com"
+		// }
+
+		var url = db.mongoURL;
+
+		mongoClient.connect(url, function(err, dbase) {
+			if (err) {
+				console.log("Sorry error", err);
+			} else {
+				var count = 0;
+				var dbo = dbase.db("rssfeeds");
+				console.log("Connection Succesful", url);
+				for(var i in feed) {	
+					dbo.collection("feeds").insert({
+						title: feed[i]['title'],
+						link: feed[i]['link']
+					});
+					++count;
+				}
+				console.log("We added", count);
+				// saveData();
+			}
+		});
+
+		function saveData() {
+			var feed = new Feed(dummyFeed);
+			feed.save(feed);
+			console.log(feed.title);
+			console.log(feed.link);
+			
+		}
+
+		function findData() {
+
+		}
+
+	});   
 }
-
 module.exports.help = {
 	name: "rss"
 }

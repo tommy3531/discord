@@ -42,14 +42,14 @@ fs.readdir("./cmds/", (err, files) => {
 bot.on("ready", async () => {
   console.log(bot.user.username + " " + "Is ready!!!");
 
-  try {
+  // try {
 
-  	let link = await bot.generateInvite(["ADMINISTRATOR"]);
-  	console.log(link);
+  // 	let link = await bot.generateInvite(["ADMINISTRATOR"]);
+  // 	console.log(link);
 
-  } catch(e) {
-  	console.log(e.stack);
-  }
+  // } catch(e) {
+  // 	console.log(e.stack);
+  // }
 
 });
 bot.on("message", (message) => {
