@@ -1,0 +1,44 @@
+		// function saveData() {
+		// 	var feed = new Feed(dummyFeed);
+		// 	feed.save(feed);
+		// 	console.log(feed.title);
+		// 	console.log(feed.link);
+			
+		// }
+
+		// function findData() {
+
+		// }
+
+					// dbo.collection("feeds").insert({
+			// 	title: feed['title'],
+			// 	ink: feed['link']
+			// });
+
+
+							// console.log("We added", count);
+				// saveData();
+
+
+
+    	// for(var i in feed) {
+    	// 	let embed = new Discord.RichEmbed()
+    	// 		.setDescription("Swift RSS")
+    	// 		.setColor("#9B59B6")
+    	// 		.addField("Title", `${feed[i]["title"]}`)
+    	// 		.addField("Link", `${feed[i]["link"]}`)
+    	// 		message.channel.send(embed);
+    		
+    	// }
+
+  //   	var feedSchema = new mongoose.Schema({
+  //   		title: String,
+  //   		link: String
+		// });
+
+		// var Feed = mongoose.model("Feed", feedSchema);
+
+		// var dummyFeed = {
+		// 	title: "New RSS",
+		// 	link: "http://newRss.com"
+		// }

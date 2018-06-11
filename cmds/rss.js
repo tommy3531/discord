@@ -20,63 +20,39 @@ module.exports.run = async (bot, message, args) => {
     		feed.push(feedObj)
     	}
     	
-    	// for(var i in feed) {
-    	// 	let embed = new Discord.RichEmbed()
-    	// 		.setDescription("Swift RSS")
-    	// 		.setColor("#9B59B6")
-    	// 		.addField("Title", `${feed[i]["title"]}`)
-    	// 		.addField("Link", `${feed[i]["link"]}`)
-    	// 		message.channel.send(embed);
-    		
-    	// }
-
-  //   	var feedSchema = new mongoose.Schema({
-  //   		title: String,
-  //   		link: String
-		// });
-
-		// var Feed = mongoose.model("Feed", feedSchema);
-
-		// var dummyFeed = {
-		// 	title: "New RSS",
-		// 	link: "http://newRss.com"
-		// }
-
 		var url = db.mongoURL;
 
-		mongoClient.connect(url, function(err, dbase) {
+		mongoClient.connect(url, (err, dbase) => {
 			if (err) {
 				console.log("Sorry error", err);
 			} else {
 				var count = 0;
 				var dbo = dbase.db("rssfeeds");
+				var feedsCollection = dbo.collection("feeds");
 				console.log("Connection Succesful", url);
-				for(var i in feed) {	
-					dbo.collection("feeds").insert({
-						title: feed[i]['title'],
-						link: feed[i]['link']
-					});
-					++count;
+				for(var i in feed) {
+					toFeed(feed[i], feedsCollection);	
 				}
-				console.log("We added", count);
-				// saveData();
+				dbase.close();
 			}
 		});
 
-		function saveData() {
-			var feed = new Feed(dummyFeed);
-			feed.save(feed);
-			console.log(feed.title);
-			console.log(feed.link);
-			
+		function toFeed(feedObject, collection){
+			var record = 0;
+			collection.insert(feedObject, (err, feedInsert) => {
+				if(err) {
+					console.log("Bad");
+				}
+				console.log("All Feeds Inserted")
+			});
 		}
-
-		function findData() {
-
-		}
-
 	});   
 }
 module.exports.help = {
 	name: "rss"
 }
+
+
+
+
+

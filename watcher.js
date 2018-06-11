@@ -28,8 +28,6 @@ fs.readdir("./cmds/", (err, files) => {
 		console.log("No commands load!");
 		return;
 	}
-
-
 	console.log('Loading' + " " + jsfiles.length + " " + "commands" );
 
 	jsfiles.forEach((f, i) => {
@@ -41,15 +39,6 @@ fs.readdir("./cmds/", (err, files) => {
 
 bot.on("ready", async () => {
   console.log(bot.user.username + " " + "Is ready!!!");
-
-  // try {
-
-  // 	let link = await bot.generateInvite(["ADMINISTRATOR"]);
-  // 	console.log(link);
-
-  // } catch(e) {
-  // 	console.log(e.stack);
-  // }
 
 });
 bot.on("message", (message) => {
