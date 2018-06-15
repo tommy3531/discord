@@ -18,40 +18,45 @@ const botsettings = require("./botsettings.json")
 const prefix = botsettings.prefix;
 const bot = new Discord.Client({disableEveryone: true});
 const fs = require("fs");
+const endpoint = 'https://api.github.com/users'
 bot.commands = new Discord.Collection();
 
-fs.readdir("./cmds/", (err, files) => {
-	if (err) console.error(err);
+(async function main () {
 
-	let jsfiles = files.filter(f => f.split(".").pop() === "js");
-	if(jsfiles.length <= 0) {
-		console.log("No commands load!");
-		return;
-	}
-	console.log('Loading' + " " + jsfiles.length + " " + "commands" );
+	fs.readdir("./cmds/", (err, files) => {
+		if (err) console.error(err);
 
-	jsfiles.forEach((f, i) => {
-		let props = require(`./cmds/${f}`);
-		console.log(`${f} loaded!`);
-		bot.commands.set(props.help.name, props);
+		let jsfiles = files.filter(f => f.split(".").pop() === "js");
+		if(jsfiles.length <= 0) {
+			console.log("No commands load!");
+			return;
+		}
+		console.log('Loading' + " " + jsfiles.length + " " + "commands" );
+
+		jsfiles.forEach((f, i) => {
+			let props = require(`./cmds/${f}`);
+			console.log(`${f} loaded!`);
+			bot.commands.set(props.help.name, props);
+		});
 	});
-});
 
-bot.on("ready", async () => {
-  console.log(bot.user.username + " " + "Is ready!!!");
+	bot.on("ready", async () => {
+	  console.log(bot.user.username + " " + "Is ready!!!");
 
-});
-bot.on("message", (message) => {
-	if(message.author.bot) return;
+	});
+	bot.on("message", (message) => {
+		if(message.author.bot) return;
 
-	let messageArray = message.content.split(" ");
-	let cmd = messageArray[0];
-	let args = messageArray.slice(1);
+		let messageArray = message.content.split(" ");
+		let cmd = messageArray[0];
+		let args = messageArray.slice(1);
 
-	let commandfile = bot.commands.get(cmd.slice(prefix.length));
-	if(commandfile) commandfile.run(bot,message,args);
-});
-bot.login(botsettings.token);
+		let commandfile = bot.commands.get(cmd.slice(prefix.length));
+		if(commandfile) commandfile.run(bot,message,args);
+	});
+	bot.login(botsettings.token);
+
+})();
 
 
 
